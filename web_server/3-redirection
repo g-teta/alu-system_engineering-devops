@@ -1,10 +1,31 @@
 #!/usr/bin/env bash
-# Configures Nginx to redirect /redirect_me to another URL (301)
-apt-get update -y
-apt-get install nginx -y
+# Installs nginx and sets up a 301 redirect for /redirect_me
 
-# Create a redirection inside Nginx config
-sed -i '/server_name _;/a \ \trewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+apt-get update -y
+apt-get install -y nginx
+
+# Make sure nginx is running
+service nginx start
+
+# Create a redirect location in the default config
+cat > /etc/nginx/sites-available/default << 'EOF'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+EOF
 
 service nginx restart
-
