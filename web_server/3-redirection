@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Configures Nginx to redirect /redirect_me to another URL (301)
+apt-get update -y
+apt-get install nginx -y
+
+# Create a redirection inside Nginx config
+sed -i '/server_name _;/a \ \trewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+
+service nginx restart
+
