@@ -1,9 +1,20 @@
 #!/usr/bin/env bash
-# Installs and configures Nginx to serve 'Holberton School' on port 80
-apt-get update -y
-apt-get install nginx -y
+# This script installs Nginx, allows HTTP traffic, and configures the default page.
 
-echo "Holberton School" > /var/www/html/index.nginx-debian.html
+# Update package list
+sudo apt-get update -y
 
-# Restart Nginx without systemctl
-service nginx restart
+# Install Nginx
+sudo apt-get install nginx -y
+
+# Allow Nginx through the firewall
+sudo ufw allow 'Nginx HTTP'
+
+# Ensure Nginx is running
+sudo service nginx start
+
+# Create the expected content
+echo "Holberton School" | sudo tee /var/www/html/index.html
+
+# Reload Nginx to apply changes
+sudo service nginx reload
