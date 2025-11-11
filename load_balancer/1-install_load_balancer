@@ -14,15 +14,15 @@ cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
 # Configure HAProxy with frontend and backend
 cat >> /etc/haproxy/haproxy.cfg <<EOF
 
-frontend gteta-frontend
+frontend frontend
     bind *:80
     mode http
-    default_backend gteta-backend
+    default_backend backend
 
-backend gteta-backend
+backend backend
     balance roundrobin
-    server 6877-web-01 54.89.246.72 check
-    server 6877-web-02 3.84.220.150 check
+    server 6837-web-01 54.89.246.72:80 check
+    server 6837-web-02 3.84.220.150:80 check
 EOF
 
 # Restart HAProxy service
